@@ -62,8 +62,8 @@ QConsole::QConsole(QObject* parent)
   , m_ostream(stdout)
 {
     m_terminal->set_max_hint_rows(0);
-    m_terminal->bind_key_internal(Replxx::KEY::meta('p'), "history_common_prefix_search");
-    m_terminal->bind_key_internal(Replxx::KEY::meta('n'), "history_common_prefix_search");
+    m_terminal->bind_key_internal(Replxx::KEY::control('N'), "history_next");
+    m_terminal->bind_key_internal(Replxx::KEY::control('P'), "history_previous");
     m_terminal->set_max_history_size(10000);
     m_terminal->set_word_break_characters(" \t,%!;:=*~^'\"/?<>|[](){}");
     m_terminal->set_completion_count_cutoff(256);

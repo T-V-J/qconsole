@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 - May 8, 2021
+
+- Fix Ctrl+P and Ctrl+N
+
 ## 2.0.0 - May 8, 2021
 
 - Adding the default keybindings and configuration is no longer optional
