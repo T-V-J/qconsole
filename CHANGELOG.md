@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.3 - May 9, 2021
+
+- Added Github actions
+- Fixed windows-2019 build
+
 ## 2.0.2 - May 9, 2021
 
 - Improve documentation
