@@ -98,10 +98,10 @@ QConsole::QConsole(QObject* parent)
     });
 
     m_terminal->set_highlighter_callback([this](const std::string& input, Replxx::colors_t& colors) {
-        auto prefixHighlightLength = 0;
-        auto endOfWord = input.find(" "); // Check to see if we have multiple words (i.e. command + arguments)
+        size_t prefixHighlightLength = 0;
+        size_t endOfWord = input.find(" "); // Check to see if we have multiple words (i.e. command + arguments)
 
-        if (endOfWord == -1ul) {
+        if (endOfWord == std::string::npos) {
             if (const auto c = findCommandByName(input); c != nullptr) {
                 prefixHighlightLength = input.length();
             }
@@ -111,7 +111,7 @@ QConsole::QConsole(QObject* parent)
             }
         }
 
-        for (auto i = 0; i < prefixHighlightLength; i++) {
+        for (size_t i = 0; i < prefixHighlightLength; i++) {
             colors.at(i) = Replxx::Color::BRIGHTGREEN;
         }
     });
@@ -190,7 +190,7 @@ void QConsole::evaluateLine(const char* line)
     m_terminal->history_add(a.toStdString());
 
     if (const auto c = findCommandByName(name); c != nullptr) {
-        return c->invoke(Context{ .arguments = tokens.mid(1) });
+        return c->invoke(Context{ tokens.mid(1) });
     }
 
     m_ostream << QConsole::colorize(QStringLiteral("Command not found: ").append(tokens[0]), QConsole::Color::Red,
