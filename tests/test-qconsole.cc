@@ -100,7 +100,10 @@ void QConsoleTester::unicodeTest()
     console.addCommand({
       "나는 유리를 먹을 수 있어요. 그래도 아프지 않아요",
       "أنا قادر على أكل الزجاج و هذا لا يؤلمني",
-      [&check](const QConsole::Context& ctx) { check = false; },
+      [&check](const QConsole::Context& ctx) {
+          Q_UNUSED(ctx);
+          check = false;
+      },
     });
 
     console.invokeCommandByName("나는 유리를 먹을 수 있어요. 그래도 아프지 않아요");
@@ -126,7 +129,8 @@ void QConsoleTester::evaluateBenchmark()
     }
 
     console.addCommand({
-      "long-random-value-command-name-long-random-value-command-name-long-random-value-command-name-long-random-value-command-name",
+      "long-random-value-command-name-long-random-value-command-name-long-random-value-command-name-long-random-value-"
+      "command-name",
       "Random description...",
       [](const QConsole::Context& ctx) {
           Q_UNUSED(ctx)
@@ -138,8 +142,8 @@ void QConsoleTester::evaluateBenchmark()
     QBENCHMARK
     {
         for (int i = 0; i < 10000; ++i) {
-            console.invokeCommandByName(
-              "long-random-value-command-name-long-random-value-command-name-long-random-value-command-name-long-random-value-command-name");
+            console.invokeCommandByName("long-random-value-command-name-long-random-value-command-name-long-random-"
+                                        "value-command-name-long-random-value-command-name");
         }
     }
 }

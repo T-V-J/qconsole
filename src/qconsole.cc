@@ -58,8 +58,8 @@ QConsole::QConsole(QObject* parent)
   , m_commands(new Trie())
   , m_terminal(new Terminal())
   , m_echo(true)
-  , m_ostream(stdout)
   , m_running(false)
+  , m_ostream(stdout)
 {
     m_terminal->set_max_hint_rows(0);
     m_commands->burst_threshold(0);
@@ -238,7 +238,6 @@ void QConsole::addDefaultKeybindings()
     m_terminal->bind_key_internal(Replxx::KEY::control('D'), "send_eof");
     m_terminal->bind_key_internal(Replxx::KEY::control('C'), "abort_line");
     m_terminal->bind_key_internal(Replxx::KEY::control('T'), "transpose_characters");
-    m_terminal->bind_key_internal(Replxx::KEY::control('E'), "complete_next");
     m_terminal->bind_key_internal(Replxx::KEY::control('N'), "history_next");
     m_terminal->bind_key_internal(Replxx::KEY::control('P'), "history_previous");
 #ifndef Q_OS_WIN32
@@ -270,6 +269,8 @@ void QConsole::addDefaultCallbacks()
     });
 
     m_terminal->set_completion_callback([this](const std::string& input, int& input_length) {
+        Q_UNUSED(input_length);
+
         Replxx::completions_t completions;
 
         const auto& pr = m_commands->equal_prefix_range(input);
@@ -310,7 +311,7 @@ void QConsole::addDefaultCommands()
     addCommand({
       "exit",
       "Exit the application.",
-      [this](const Context& ctx) {
+      [](const Context& ctx) {
           Q_UNUSED(ctx);
           QCoreApplication::quit();
       },
@@ -342,8 +343,9 @@ void QConsole::addDefaultCommands()
           Replxx::HistoryScan hs(m_terminal->history_scan());
 
           for (auto i = 0; hs.next(); i++) {
-              m_ostream << QConsole::colorize(QString::fromStdString(hs.get().timestamp()), QConsole::Color::Blue)
-                        << ": " << hs.get().text().c_str() << "\n";
+              m_ostream << qSetFieldWidth(4) << i << qSetFieldWidth(0) << " "
+                        << QConsole::colorize(QString::fromStdString(hs.get().timestamp()), QConsole::Color::Blue)
+                        << " " << hs.get().text().c_str() << "\n";
           }
 
           m_ostream.flush();

@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     }
 
     QCoreApplication app(argc, argv);
-    app.setApplicationVersion(QStringLiteral("1.0.0"));
+    app.setApplicationVersion(QStringLiteral("1.0.1"));
     app.setApplicationName(QStringLiteral("example"));
     app.setOrganizationName(QStringLiteral("example"));
     app.setOrganizationDomain(QStringLiteral("example"));
@@ -85,6 +85,8 @@ int main(int argc, char** argv)
     c.addDefaultCommands();
 
     qInstallMessageHandler([](QtMsgType type, const QMessageLogContext& context, const QString& message) {
+        Q_UNUSED(context);
+
         switch (type) {
         case QtInfoMsg:
         case QtDebugMsg:
