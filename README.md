@@ -52,7 +52,7 @@ Or to include it in your own CMake project:
 
 ```cmake
 include(FetchContent)
-fetchcontent_declare(qconsole GIT_REPOSITORY https://github.com/le0d4v1nc1/qconsole/ GIT_TAG 2.0.2)
+fetchcontent_declare(qconsole GIT_REPOSITORY https://github.com/le0d4v1nc1/qconsole/ GIT_TAG 2.0.3)
 fetchcontent_makeavailable(qconsole)
 ```
 
