@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     }
 
     QCoreApplication app(argc, argv);
-    app.setApplicationVersion(QStringLiteral("1.0.1"));
+    app.setApplicationVersion(QStringLiteral("2.0.0"));
     app.setApplicationName(QStringLiteral("example"));
     app.setOrganizationName(QStringLiteral("example"));
     app.setOrganizationDomain(QStringLiteral("example"));

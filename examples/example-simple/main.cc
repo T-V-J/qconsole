@@ -27,7 +27,7 @@
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
-    app.setApplicationVersion("1.0.1");
+    app.setApplicationVersion("2.0.0");
     app.setApplicationName("example");
     app.setOrganizationName("example");
     app.setOrganizationDomain("example");
