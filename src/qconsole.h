@@ -77,7 +77,7 @@ public:
     // Return a formatted string with the specified color and style.
     static inline QString colorize(const QString& str, const Color& color, const Style& style = Style::Bold)
     {
-        return QStringLiteral("\e[%1;3%2m%3\e[0m").arg(static_cast<int>(style)).arg(static_cast<int>(color)).arg(str);
+        return QStringLiteral("\33[%1;3%2m%3\33[0m").arg(static_cast<int>(style)).arg(static_cast<int>(color)).arg(str);
     }
 
     // Construct a new QConsole object. Note that you shouldn't create multiple instances of this
