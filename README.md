@@ -48,7 +48,7 @@ cd qconsole
 cmake -S . -B build --target install --config Release
 ```
 
-Or if you want to include it in your your own CMake project:
+Or to include it in your own CMake project:
 
 ```cmake
 include(FetchContent)
