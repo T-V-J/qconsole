@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2 - May 9, 2021
+
+- Improve documentation
+
 ## 2.0.1 - May 8, 2021
 
 - Fix Ctrl+P and Ctrl+N

@@ -25,11 +25,7 @@ make all
 
 ## Code Style
 
-Just run `cmake-format` and `clang-format` after modifying the source code and you'll be fine.
-
-## Issues
-
-You can report bug reports or feature requests to the issue tracker. Try not to create duplicates and be descriptive in your submissions. A minimal reproducible example is appreciated for bug reports.
+Just run `cmake-format` and `clang-format` after modifying the source code to be consistent.
 
 ## Pull Requests
 
@@ -41,4 +37,4 @@ Examples of good commit messages:
 
 ## Copyright
 
-You retain your copyright when submitting changes. Kindly add your name to the license header (if any) to make it easier for people to reference.
+You retain your copyright when submitting changes so please append your name to the license header.

@@ -1,6 +1,6 @@
 # QConsole
 
-QConsole is a high-level C++17 REPL library for Qt6 console applications with support for Linux, MacOS, and Windows. It features syntax-highlighting, command history, unicode, help information, default keybindings, hints, password input, completions, and colorization.
+QConsole is a high-level C++17 REPL library for Qt6 console applications with support for Linux, MacOS, and Windows. It features syntax-highlighting, history, unicode, default commands (help, version, exit, etc...), native keybindings, hints, password input, auto-complete, and colorization.
 
 ## Usage
 
@@ -23,9 +23,9 @@ console.addCommand({
 console.start();
 ```
 
-See the [simple example](./examples/example-simple) for the above and the [complex example](./examples/example-complex) for a more involved application. There's also the [widget-example](./examples/example-widgets) demonstrating the usage of the console alongside a `QGuiApplication/QApplication`.
+See the [simple example](./examples/example-simple) for the above and the [complex example](./examples/example-complex) for a more involved application. There is also the [widget-example](./examples/example-widgets) demonstrating the usage of a `QConsole` alongside a `QGuiApplication` or `QApplication`.
 
-Also, note that you shouldn't be using asynchronous code to output messages with this library. Wrap your network signal connections with a `QEventLoop` or use a `QFuture` otherwise you'll end up with output that isn't synchronized with the current command.
+Do not use asynchronous code to output messages with this library. Instead, wrap your signals with `QEventLoop` (like in the complex example) or use `QFuture` to make your asynchronous methods or functions synchronous.
 
 ## Dependencies
 
@@ -40,7 +40,7 @@ The following libraries will be automatically downloaded by CMake:
 
 ## Installation
 
-You can install the library by running the following commands:
+You can install this library by running the following commands:
 
 ```shell
 git clone https://github.com/le0d4v1nc1/qconsole
@@ -48,18 +48,18 @@ cd qconsole
 cmake -S . -B build --target install --config Release
 ```
 
-or alternatively to include it in your own CMake project:
+Or if you want to include it in your your own CMake project:
 
 ```cmake
 include(FetchContent)
-fetchcontent_declare(qconsole GIT_REPOSITORY https://github.com/le0d4v1nc1/qconsole/ GIT_TAG 2.0.1)
+fetchcontent_declare(qconsole GIT_REPOSITORY https://github.com/le0d4v1nc1/qconsole/ GIT_TAG 2.0.2)
 fetchcontent_makeavailable(qconsole)
 ```
 
 ## Contributions
 
-Contributions or feature-requests are quite welcome. See the [CONTRIBUTING](./CONTRIBUTING.md) file for instructions on how to submit your changes to this project.
+This project accepts pull-requests, bug-reports, and/or feature-requests; see [CONTRIBUTING](./CONTRIBUTING.md).
 
 ## License
 
-This software is available under the MIT license.
+This project is available under the MIT license.
