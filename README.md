@@ -56,7 +56,7 @@ or alternatively to include it in your own CMake project:
 
 ```cmake
 include(FetchContent)
-fetchcontent_declare(qconsole GIT_REPOSITORY https://github.com/le0d4v1nc1/qconsole/ GIT_TAG 1.0.0)
+fetchcontent_declare(qconsole GIT_REPOSITORY https://github.com/le0d4v1nc1/qconsole/ GIT_TAG 1.0.1)
 fetchcontent_makeavailable(qconsole)
 ```
 
