@@ -68,9 +68,9 @@ void QConsoleTester::populateBenchmark()
 
 void QConsoleTester::colorizeTest()
 {
-    QVERIFY(QConsole::colorize("Test", QConsole::Color::Cyan, QConsole::Style::Normal) == "\e[0;36mTest\e[0m");
-    QVERIFY(QConsole::colorize("Test", QConsole::Color::Blue, QConsole::Style::Normal) == "\e[0;34mTest\e[0m");
-    QVERIFY(QConsole::colorize("Test", QConsole::Color::Cyan, QConsole::Style::Bold) == "\e[1;36mTest\e[0m");
+    QVERIFY(QConsole::colorize("Test", QConsole::Color::Cyan, QConsole::Style::Normal) == "\33[0;36mTest\33[0m");
+    QVERIFY(QConsole::colorize("Test", QConsole::Color::Blue, QConsole::Style::Normal) == "\33[0;34mTest\33[0m");
+    QVERIFY(QConsole::colorize("Test", QConsole::Color::Cyan, QConsole::Style::Bold) == "\33[1;36mTest\33[0m");
 }
 
 void QConsoleTester::unicodeTest()
