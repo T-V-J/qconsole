@@ -1,6 +1,8 @@
 name: Default
 
 on:
+  workflow_dispatch:
+    branches: [$default-branch]
   push:
     branches: [$default-branch]
   pull_request:
@@ -12,7 +14,7 @@ jobs:
     
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019, macos-11.0]
+        os: [ubuntu-20.04, windows-2019, macos-10.15]
 
     steps:
       - uses: actions/checkout@v1
