@@ -62,6 +62,60 @@ QConsole::QConsole(QObject* parent)
   , m_ostream(stdout)
 {
     m_terminal->set_max_hint_rows(0);
+    m_terminal->bind_key_internal(Replxx::KEY::meta('p'), "history_common_prefix_search");
+    m_terminal->bind_key_internal(Replxx::KEY::meta('n'), "history_common_prefix_search");
+    m_terminal->set_max_history_size(10000);
+    m_terminal->set_word_break_characters(" \t,%!;:=*~^'\"/?<>|[](){}");
+    m_terminal->set_completion_count_cutoff(256);
+    m_terminal->set_double_tab_completion(false);
+    m_terminal->set_complete_on_empty(true);
+    m_terminal->set_beep_on_ambiguous_completion(true);
+    m_terminal->set_no_color(false);
+    m_terminal->set_unique_history(true);
+
+    m_terminal->set_hint_callback([this](std::string const& input, int& input_length, Replxx::Color& color) {
+        if (input_length > 0) {
+            if (const auto& pr = m_commands->equal_prefix_range(input); pr.first != pr.second) {
+                color = Replxx::Color::BROWN;
+                return Replxx::hints_t({ pr.first.key() });
+            }
+        }
+
+        return Replxx::hints_t();
+    });
+
+    m_terminal->set_completion_callback([this](const std::string& input, int& input_length) {
+        Q_UNUSED(input_length);
+
+        Replxx::completions_t completions;
+
+        const auto& pr = m_commands->equal_prefix_range(input);
+        for (auto iter = pr.first; iter != pr.second; ++iter) {
+            completions.emplace_back(Replxx::Completion(iter.key(), Replxx::Color::BROWN));
+        }
+
+        return completions;
+    });
+
+    m_terminal->set_highlighter_callback([this](const std::string& input, Replxx::colors_t& colors) {
+        auto prefixHighlightLength = 0;
+        auto endOfWord = input.find(" "); // Check to see if we have multiple words (i.e. command + arguments)
+
+        if (endOfWord == -1ul) {
+            if (const auto c = findCommandByName(input); c != nullptr) {
+                prefixHighlightLength = input.length();
+            }
+        } else {
+            if (const auto c = findCommandByName(input.substr(0, endOfWord)); c != nullptr) {
+                prefixHighlightLength = endOfWord;
+            }
+        }
+
+        for (auto i = 0; i < prefixHighlightLength; i++) {
+            colors.at(i) = Replxx::Color::BRIGHTGREEN;
+        }
+    });
+
     m_commands->burst_threshold(0);
     m_commands->max_load_factor(1.0);
 }
@@ -197,108 +251,6 @@ void QConsole::setNoColor(bool color)
 void QConsole::setUniqueHistory(bool unique)
 {
     m_terminal->set_unique_history(unique);
-}
-
-void QConsole::addDefaultConfiguration()
-{
-    setMaxHistorySize(10000);
-    setWordBreakCharacters(" \t,%!;:=*~^'\"/?<>|[](){}");
-    setCompletionCountCutoff(256);
-    setDoubleTabCompletion(false);
-    setCompleteOnEmpty(true);
-    setBeepOnAmbiguousCompletion(true);
-    setNoColor(false);
-    setUniqueHistory(true);
-}
-
-void QConsole::addDefaultKeybindings()
-{
-    m_terminal->bind_key_internal(Replxx::KEY::BACKSPACE, "delete_character_left_of_cursor");
-    m_terminal->bind_key_internal(Replxx::KEY::DELETE, "delete_character_under_cursor");
-    m_terminal->bind_key_internal(Replxx::KEY::LEFT, "move_cursor_left");
-    m_terminal->bind_key_internal(Replxx::KEY::RIGHT, "move_cursor_right");
-    m_terminal->bind_key_internal(Replxx::KEY::UP, "history_previous");
-    m_terminal->bind_key_internal(Replxx::KEY::DOWN, "history_next");
-    m_terminal->bind_key_internal(Replxx::KEY::PAGE_UP, "history_first");
-    m_terminal->bind_key_internal(Replxx::KEY::PAGE_DOWN, "history_last");
-    m_terminal->bind_key_internal(Replxx::KEY::HOME, "move_cursor_to_begining_of_line");
-    m_terminal->bind_key_internal(Replxx::KEY::END, "move_cursor_to_end_of_line");
-    m_terminal->bind_key_internal(Replxx::KEY::TAB, "complete_line");
-    m_terminal->bind_key_internal(Replxx::KEY::control(Replxx::KEY::LEFT), "move_cursor_one_word_left");
-    m_terminal->bind_key_internal(Replxx::KEY::control(Replxx::KEY::RIGHT), "move_cursor_one_word_right");
-    m_terminal->bind_key_internal(Replxx::KEY::control(Replxx::KEY::UP), "hint_previous");
-    m_terminal->bind_key_internal(Replxx::KEY::control(Replxx::KEY::DOWN), "hint_next");
-    m_terminal->bind_key_internal(Replxx::KEY::control(Replxx::KEY::ENTER), "commit_line");
-    m_terminal->bind_key_internal(Replxx::KEY::control('R'), "history_incremental_search");
-    m_terminal->bind_key_internal(Replxx::KEY::control('W'), "kill_to_begining_of_word");
-    m_terminal->bind_key_internal(Replxx::KEY::control('U'), "kill_to_begining_of_line");
-    m_terminal->bind_key_internal(Replxx::KEY::control('K'), "kill_to_end_of_line");
-    m_terminal->bind_key_internal(Replxx::KEY::control('Y'), "yank");
-    m_terminal->bind_key_internal(Replxx::KEY::control('L'), "clear_screen");
-    m_terminal->bind_key_internal(Replxx::KEY::control('D'), "send_eof");
-    m_terminal->bind_key_internal(Replxx::KEY::control('C'), "abort_line");
-    m_terminal->bind_key_internal(Replxx::KEY::control('T'), "transpose_characters");
-    m_terminal->bind_key_internal(Replxx::KEY::control('N'), "history_next");
-    m_terminal->bind_key_internal(Replxx::KEY::control('P'), "history_previous");
-#ifndef Q_OS_WIN32
-    m_terminal->bind_key_internal(Replxx::KEY::control('V'), "verbatim_insert");
-    m_terminal->bind_key_internal(Replxx::KEY::control('Z'), "suspend");
-#endif
-    m_terminal->bind_key_internal(Replxx::KEY::meta(Replxx::KEY::BACKSPACE), "kill_to_whitespace_on_left");
-    m_terminal->bind_key_internal(Replxx::KEY::meta('p'), "history_common_prefix_search");
-    m_terminal->bind_key_internal(Replxx::KEY::meta('n'), "history_common_prefix_search");
-    m_terminal->bind_key_internal(Replxx::KEY::meta('d'), "kill_to_end_of_word");
-    m_terminal->bind_key_internal(Replxx::KEY::meta('y'), "yank_cycle");
-    m_terminal->bind_key_internal(Replxx::KEY::meta('u'), "uppercase_word");
-    m_terminal->bind_key_internal(Replxx::KEY::meta('l'), "lowercase_word");
-    m_terminal->bind_key_internal(Replxx::KEY::meta('c'), "capitalize_word");
-    m_terminal->bind_key_internal(Replxx::KEY::INSERT, "toggle_overwrite_mode");
-}
-
-void QConsole::addDefaultCallbacks()
-{
-    m_terminal->set_hint_callback([this](std::string const& input, int& input_length, Replxx::Color& color) {
-        if (input_length > 0) {
-            if (const auto& pr = m_commands->equal_prefix_range(input); pr.first != pr.second) {
-                color = Replxx::Color::BROWN;
-                return Replxx::hints_t({ pr.first.key() });
-            }
-        }
-
-        return Replxx::hints_t();
-    });
-
-    m_terminal->set_completion_callback([this](const std::string& input, int& input_length) {
-        Q_UNUSED(input_length);
-
-        Replxx::completions_t completions;
-
-        const auto& pr = m_commands->equal_prefix_range(input);
-        for (auto iter = pr.first; iter != pr.second; ++iter) {
-            completions.emplace_back(Replxx::Completion(iter.key(), Replxx::Color::BROWN));
-        }
-
-        return completions;
-    });
-
-    m_terminal->set_highlighter_callback([this](const std::string& input, Replxx::colors_t& colors) {
-        auto prefixHighlightLength = 0;
-        auto endOfWord = input.find(" "); // Check to see if we have multiple words (i.e. command + arguments)
-
-        if (endOfWord == -1ul) {
-            if (const auto c = findCommandByName(input); c != nullptr) {
-                prefixHighlightLength = input.length();
-            }
-        } else {
-            if (const auto c = findCommandByName(input.substr(0, endOfWord)); c != nullptr) {
-                prefixHighlightLength = endOfWord;
-            }
-        }
-
-        for (auto i = 0; i < prefixHighlightLength; i++) {
-            colors.at(i) = Replxx::Color::BRIGHTGREEN;
-        }
-    });
 }
 
 size_t QConsole::commandCount()

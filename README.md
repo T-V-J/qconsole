@@ -8,10 +8,6 @@ Here is a simple demonstration:
 
 ```cpp
 QConsole console;
-
-console.addDefaultConfiguration();
-console.addDefaultCallbacks();
-console.addDefaultKeybindings();
 console.addDefaultCommands();
 console.setHistoryFilePath("history.txt");
 console.setDefaultPrompt(QConsole::colorize(">> ", QConsole::Color::Red, QConsole::Style::Bold));

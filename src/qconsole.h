@@ -112,17 +112,8 @@ public:
     // Set the path to the history file.
     void setHistoryFilePath(const QString& path);
 
-    // Add the default configuration for the terminal.
-    void addDefaultConfiguration();
-
-    // Add the default callbacks (hints, completions, etc...).
-    void addDefaultCallbacks();
-
     // Add the default commands (help, version, etc...).
     void addDefaultCommands();
-
-    // Add the default platform keybindings.
-    void addDefaultKeybindings();
 
     // Set whether stdin should show the input.
     void setStdinEcho(bool enable);

@@ -79,9 +79,6 @@ int main(int argc, char** argv)
 
     // Create a static instance so that we can use it inside our message handler.
     static QConsole c;
-    c.addDefaultConfiguration();
-    c.addDefaultCallbacks();
-    c.addDefaultKeybindings();
     c.addDefaultCommands();
 
     qInstallMessageHandler([](QtMsgType type, const QMessageLogContext& context, const QString& message) {

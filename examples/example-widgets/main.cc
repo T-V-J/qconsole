@@ -43,9 +43,6 @@ int main(int argc, char** argv)
     auto c = new QConsole();
     c->start(); // Start before moving to a new thread.
     c->moveToThread(thread);
-    c->addDefaultConfiguration();
-    c->addDefaultCallbacks();
-    c->addDefaultKeybindings();
     c->addDefaultCommands();
     c->setHistoryFilePath("history.txt");
     c->setDefaultPrompt(QConsole::colorize(">> ", QConsole::Color::Red));

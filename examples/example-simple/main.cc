@@ -33,9 +33,6 @@ int main(int argc, char** argv)
     app.setOrganizationDomain("example");
 
     QConsole c;
-    c.addDefaultConfiguration();
-    c.addDefaultCallbacks();
-    c.addDefaultKeybindings();
     c.addDefaultCommands();
     c.setHistoryFilePath("history.txt");
     c.setDefaultPrompt(QConsole::colorize(">> ", QConsole::Color::Red));
