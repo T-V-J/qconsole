@@ -63,7 +63,7 @@ int main(int argc, char** argv)
     c->addCommand({
       "set-text",
       "Change the text of the QTextEdit!",
-      [&](const QConsole::Context ctx) {
+      [&](const QConsole::Context& ctx) {
           // Note that we have to invoke the method from the main thread since our current
           // context is the QConsole thread.
           QMetaObject::invokeMethod(
