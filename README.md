@@ -62,7 +62,7 @@ fetchcontent_makeavailable(qconsole)
 
 ## Contributions
 
-Contributions or feature-requests are quite welcome. See the [CONTRIBUTING](./CONTRIBUTING) file for instructions on how to submit your changes to this project.
+Contributions or feature-requests are quite welcome. See the [CONTRIBUTING](./CONTRIBUTING.md) file for instructions on how to submit your changes to this project.
 
 ## License
 
